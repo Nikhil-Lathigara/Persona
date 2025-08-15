@@ -26,7 +26,7 @@ const MentorSelection = ({ onSelectMentor }) => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1 scrollbar-custom">
           {mentors.map((mentor) => (
             <div
               key={mentor.id}
