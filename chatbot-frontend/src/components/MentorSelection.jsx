@@ -15,7 +15,7 @@ const mentors = [
 
 const MentorSelection = ({ onSelectMentor }) => {
   return (
-    <div className="fixed inset-0 bg-gradient-to-b from-gray-900 to-black text-white">
+    <div className="fixed inset-0 bg-gradient-to-b from-gray-900 to-black text-white overflow-y-auto">
       <div className="max-w-4xl mx-auto px-4 py-8 h-full flex flex-col">
         <div className="text-center mb-8 bg-black/40 p-6 rounded-xl backdrop-blur-sm border border-white/10">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent mb-2">
