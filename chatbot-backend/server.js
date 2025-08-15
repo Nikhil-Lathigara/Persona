@@ -39,13 +39,10 @@ app.post('/api/chat', async (req, res) => {
       return res.status(400).json({ error: 'Invalid mentor ID' });
     }
 
-    // Initialize or get existing chat history with persistent sessions
+    // Initialize or get existing chat history
     if (!chatHistories.has(sessionId)) {
-      // Initialize with the persona and store it with the guest token
       const initialHistory = [mentors[mentorId].persona];
       chatHistories.set(sessionId, initialHistory);
-      
-      // Store the session creation time
       chatHistories.set(`${sessionId}-created`, Date.now());
     }
     const chatHistory = chatHistories.get(sessionId);
@@ -54,12 +51,12 @@ app.post('/api/chat', async (req, res) => {
     const cleanupTime = Date.now() - (72 * 60 * 60 * 1000);
     for (const [key, createdTime] of chatHistories) {
       if (key.endsWith('-created') && createdTime < cleanupTime) {
-        chatHistories.delete(key.replace('-created', '')); // Delete chat history
-        chatHistories.delete(key); // Delete timestamp
+        chatHistories.delete(key.replace('-created', ''));
+        chatHistories.delete(key);
       }
     }
 
-    // Add user message to history
+    // Add user message
     chatHistory.push({ role: "user", content: message });
 
     // Get AI response
@@ -70,32 +67,22 @@ app.post('/api/chat', async (req, res) => {
 
     let assistantResponse = response.choices[0].message.content;
 
-    // Format the response for clean presentation
+    // Clean text formatting
     const formatResponse = (text) => {
-      // Convert links to clickable HTML elements with proper styling
+      // Replace specific GenAI link
       text = text.replace(
-        /(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/g
+        /(https?:\/\/courses\.chaicode\.com\/learn\/batch\/about\?bundleId=227321)/g,
+        'GenAI with Python ($1)'
       );
 
-      // Handle paragraphs - split by double newlines
-      text = text.split('\n\n').map(paragraph => {
-        // Skip if paragraph is empty
-        if (!paragraph.trim()) return '';
-        return `<p class="mb-4">${paragraph.trim()}</p>`;
-      }).join('');
+      // Replace all other links with plain "Link (url)"
+      text = text.replace(
+        /(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/g,
+        'Link ($1)'
+      );
 
-      // Handle single line breaks
-      text = text.replace(/\n/g, '<br>');
-
-      // Format lists if they exist (both bullet points and numbered)
-      text = text.replace(/^(?:- |\* )(.*?)$/gm, '<li class="ml-4">$1</li>');
-      text = text.replace(/^(\d+\. )(.*?)$/gm, '<li class="ml-4">$2</li>');
-
-      // Wrap consecutive list items in ul/ol tags
-      text = text.replace(/<li.*?>(.*?)<\/li>/g, '<ul class="list-disc mb-4">$&</ul>');
-
-      // Clean up nested lists (remove extra ul tags)
-      text = text.replace(/<\/ul><ul.*?>/g, '');
+      // Remove extra spaces and normalize line breaks
+      text = text.replace(/\n{3,}/g, '\n\n').trim();
 
       return text;
     };
@@ -105,7 +92,6 @@ app.post('/api/chat', async (req, res) => {
     // Add assistant response to history
     chatHistory.push({ role: "assistant", content: assistantResponse });
 
-    // Send response
     res.json({
       message: assistantResponse,
       mentor: mentors[mentorId].name
