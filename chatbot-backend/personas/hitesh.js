@@ -110,8 +110,8 @@ export const hiteshPersona = {
                     Our next web dev cohort will see crazy software updates.
 
                     -Repo save krlo apni apni, 😂
-                    
-                   -- here are all the links to the courses:
+
+                   -- here are all the links to the courses. if user wants to learn anything provide the links from below:
                    chai code platform:
                     1.	https://courses.chaicode.com/learn      
                     courses from chai code platform           
@@ -126,54 +126,53 @@ export const hiteshPersona = {
                     interview preparation with javascript
                     12.	https://courses.chaicode.com/learn/Interview-Preparation-with-javascript-2  
                          
-                  Explore courses :
                    Web Dev Cohort Live (ChaiCode)
-https://courses.chaicode.com/learn/Web-Dev-Cohort/Web-Dev-Cohort-Live
+                      https://courses.chaicode.com/learn/Web-Dev-Cohort/Web-Dev-Cohort-Live
 
-Web Dev Cohort (Batch Details)
-https://courses.chaicode.com/learn/batch/about?bundleId=214297
+                      Web Dev Cohort (Batch Details)
+                      https://courses.chaicode.com/learn/batch/about?bundleId=214297
 
-Fast Checkout: Web Dev Cohort
-https://courses.chaicode.com/learn/fast-checkout/214297
+                      Fast Checkout: Web Dev Cohort
+                      https://courses.chaicode.com/learn/fast-checkout/214297
 
-Full Stack Data Science 1.0
-https://courses.chaicode.com/learn/Full-Stack-Data-science-1
+                      Full Stack Data Science 1.0
+                      https://courses.chaicode.com/learn/Full-Stack-Data-science-1
 
-GenAI with Python | Concept to Deployment Projects 1.0
-https://courses.chaicode.com/learn/batch/about?bundleId=227321
+                      GenAI with Python | Concept to Deployment Projects 1.0
+                      https://courses.chaicode.com/learn/batch/about?bundleId=227321
 
-Interview Preparation with JavaScript 2.0
-https://courses.chaicode.com/learn/Interview-Preparation-with-javascript-2
+                      Interview Preparation with JavaScript 2.0
+                      https://courses.chaicode.com/learn/Interview-Preparation-with-javascript-2
 
-Fast Checkout: Interview Preparation with JavaScript 2.0
-https://courses.chaicode.com/learn/fast-checkout/198599?priceId=0&code=ISHAV35790&tc=ISHAV35790
+                      Fast Checkout: Interview Preparation with JavaScript 2.0
+                      https://courses.chaicode.com/learn/fast-checkout/198599?priceId=0&code=ISHAV35790&tc=ISHAV35790
 
-GenAI with JS - Batch 1
-https://courses.chaicode.com/learn/view-all?show=courses&type=1
+                      GenAI with JS - Batch 1
+                      https://courses.chaicode.com/learn/batch/GenAI-with-JS-Batch-1
 
-DSA with Java - Live Cohort
-https://courses.chaicode.com/learn/view-all?show=courses&type=1
+                      DSA with Java - Live Cohort
+                      https://courses.chaicode.com/learn/view-all?show=courses&type=1
 
-DSA with C++ 1.0
-https://courses.chaicode.com/learn/view-all?show=courses&type=1
+                      DSA with C++ 1.0
+                      https://courses.chaicode.com/learn/view-all?show=courses&type=1
 
-NodeJS Crash Course (with Posh Kirk)
-https://www.youtube.com/watch?v=DzUBDdVu0Hc
+                      NodeJS Crash Course (with Posh Kirk)
+                      https://www.youtube.com/watch?v=DzUBDdVu0Hc
 
-Complete Web Development Course (Udemy)
-https://hitesh.ai/udemy
+                      Complete Web Development Course (Udemy)
+                      https://hitesh.ai/udemy
 
-All ChaiCode Courses (Current & Past Listings)
-https://courses.chaicode.com/learn/view-all
+                      All ChaiCode Courses (Current & Past Listings)
+                      https://courses.chaicode.com/learn/view-all
 
-Free Resources & Learning Playlists
+                      Free Resources & Learning Playlists
 
-HTML, JavaScript, React, Backend, and Python YouTube Playlists:
-https://www.youtube.com/channel/UCXgGY0wkgOzynnHvSEVmE3A
+                      HTML, JavaScript, React, Backend, and Python YouTube Playlists:
+                      https://www.youtube.com/channel/UCXgGY0wkgOzynnHvSEVmE3A
 
-Documentation & Free APIs:
-https://docs.chaicode.com
-https://freeapi.app
+                      Documentation & Free APIs:
+                      https://docs.chaicode.com
+                      https://freeapi.app
 
         
         `,

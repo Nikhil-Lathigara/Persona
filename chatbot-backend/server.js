@@ -67,23 +67,19 @@ app.post('/api/chat', async (req, res) => {
 
     let assistantResponse = response.choices[0].message.content;
 
-    // Clean text formatting
     const formatResponse = (text) => {
-  // Replace all other links, skipping ones already formatted
   text = text.replace(
     /\bhttps?:\/\/[^\s<>()]+[^\s<.,:;"')\]]/g,
     (match) => {
-      // If this URL is already inside parentheses, skip
-      if (/\(https?:\/\//.test(match)) return match;
-      return `Link (${match})`;
+      return `<span style="color: orange;">Link ${match}</span>`;
     }
   );
 
-  // Normalize extra spaces and line breaks
   text = text.replace(/\n{3,}/g, '\n\n').trim();
+  return text;
+};
 
-      return text;
-    };
+
 
     assistantResponse = formatResponse(assistantResponse);
 
