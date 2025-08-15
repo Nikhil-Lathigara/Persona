@@ -74,8 +74,7 @@ app.post('/api/chat', async (req, res) => {
     const formatResponse = (text) => {
       // Convert links to clickable HTML elements with proper styling
       text = text.replace(
-        /(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/g,
-        '<a href="$1" class="text-orange-400 hover:text-orange-300 underline inline-block" target="_blank" rel="noopener noreferrer">$1</a>'
+        /(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/g
       );
 
       // Handle paragraphs - split by double newlines
