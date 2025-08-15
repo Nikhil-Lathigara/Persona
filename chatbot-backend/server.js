@@ -8,7 +8,13 @@ import { piyushPersona } from './personas/piyush.js';
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors(
+  {
+    origin: ['*', 'https://persona-bay-pi.vercel.app/'], // Replace with your frontend URL
+    methods: ['GET', 'POST'],
+    credentials: true
+  }
+));
 app.use(express.json());
 
 const client = new OpenAI({
