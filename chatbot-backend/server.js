@@ -69,20 +69,18 @@ app.post('/api/chat', async (req, res) => {
 
     // Clean text formatting
     const formatResponse = (text) => {
-      // Replace specific GenAI link
-      text = text.replace(
-        /(https?:\/\/courses\.chaicode\.com\/learn\/batch\/about\?bundleId=227321)/g,
-        'GenAI with Python ($1)'
-      );
+  // Replace all other links, skipping ones already formatted
+  text = text.replace(
+    /\bhttps?:\/\/[^\s<>()]+[^\s<.,:;"')\]]/g,
+    (match) => {
+      // If this URL is already inside parentheses, skip
+      if (/\(https?:\/\//.test(match)) return match;
+      return `Link (${match})`;
+    }
+  );
 
-      // Replace all other links with plain "Link (url)"
-      text = text.replace(
-        /(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/g,
-        'Link ($1)'
-      );
-
-      // Remove extra spaces and normalize line breaks
-      text = text.replace(/\n{3,}/g, '\n\n').trim();
+  // Normalize extra spaces and line breaks
+  text = text.replace(/\n{3,}/g, '\n\n').trim();
 
       return text;
     };
