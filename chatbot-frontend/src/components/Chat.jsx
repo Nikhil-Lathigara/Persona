@@ -100,7 +100,7 @@ const Chat = ({ selectedMentor, onBack }) => {
 
     setIsLoading(true);
     try {
-      const response = await fetch('https://persona-pmor.onrender.com/api/chat', {
+      const response = await fetch('https://persona-fgx3.onrender.com/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
