@@ -1,36 +1,38 @@
-import { useState, useRef, useEffect } from 'react';
-import { ArrowLeftIcon } from '@heroicons/react/24/solid';
+import { useState, useRef, useEffect } from "react";
+import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import MarkdownMessage from "./MarkdownMessage";
 
 const Chat = ({ selectedMentor, onBack }) => {
   const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const guestToken = useRef(
-    localStorage.getItem('guestToken') || 
-    `guest-${Math.random().toString(36).substring(2, 15)}`
+    localStorage.getItem("guestToken") ||
+      `guest-${Math.random().toString(36).substring(2, 15)}`
   );
 
   // Load messages from localStorage when component mounts
   useEffect(() => {
     // Ensure guestToken is saved
-    localStorage.setItem('guestToken', guestToken.current);
-    
+    localStorage.setItem("guestToken", guestToken.current);
+
     // Load saved messages
-    const savedMessages = localStorage.getItem(`chat-${selectedMentor.id}-${guestToken.current}`);
+    const savedMessages = localStorage.getItem(
+      `chat-${selectedMentor.id}-${guestToken.current}`
+    );
     if (savedMessages) {
       try {
         const parsedMessages = JSON.parse(savedMessages);
         setMessages(parsedMessages);
       } catch (error) {
-        console.error('Error parsing saved messages:', error);
+        console.error("Error parsing saved messages:", error);
       }
     }
   }, [selectedMentor.id]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -38,12 +40,12 @@ const Chat = ({ selectedMentor, onBack }) => {
   }, [messages]);
 
   const [isTyping, setIsTyping] = useState(false);
-  const [typingText, setTypingText] = useState('');
+  const [typingText, setTypingText] = useState("");
   const [currentTypingIndex, setCurrentTypingIndex] = useState(0);
 
   const simulateTyping = (text, typingDelay) => {
     setIsTyping(true);
-    setTypingText('');
+    setTypingText("");
     setCurrentTypingIndex(0);
 
     // Split by words but preserve HTML tags
@@ -52,25 +54,25 @@ const Chat = ({ selectedMentor, onBack }) => {
 
     const typingInterval = setInterval(() => {
       if (currentIndex < words.length) {
-        setTypingText(prev => prev + (prev ? ' ' : '') + words[currentIndex]);
+        setTypingText((prev) => prev + (prev ? " " : "") + words[currentIndex]);
         currentIndex++;
       } else {
         clearInterval(typingInterval);
         setIsTyping(false);
-        
+
         // Update messages with assistant response
-        setMessages(prevMessages => {
+        setMessages((prevMessages) => {
           const updatedMessages = [
             ...prevMessages,
-            { role: 'assistant', content: text },
+            { role: "assistant", content: text },
           ];
-          
+
           // Save to localStorage after assistant response
           localStorage.setItem(
-            `chat-${selectedMentor.id}-${guestToken.current}`, 
+            `chat-${selectedMentor.id}-${guestToken.current}`,
             JSON.stringify(updatedMessages)
           );
-          
+
           return updatedMessages;
         });
       }
@@ -81,41 +83,44 @@ const Chat = ({ selectedMentor, onBack }) => {
     if (!input.trim()) return;
 
     const userMessage = input.trim();
-    setInput('');
-    
+    setInput("");
+
     // Update messages with user message
-    setMessages(prevMessages => {
+    setMessages((prevMessages) => {
       const updatedMessages = [
         ...prevMessages,
-        { role: 'user', content: userMessage },
+        { role: "user", content: userMessage },
       ];
-      
+
       // Save to localStorage
       localStorage.setItem(
-        `chat-${selectedMentor.id}-${guestToken.current}`, 
+        `chat-${selectedMentor.id}-${guestToken.current}`,
         JSON.stringify(updatedMessages)
       );
-      
+
       return updatedMessages;
     });
 
     setIsLoading(true);
     try {
-      const response = await fetch('https://persona-fgx3.onrender.com/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: userMessage,
-          mentorId: selectedMentor.id,
-          sessionId: selectedMentor.id + '-' + guestToken.current
-        }),
-      });
+      const response = await fetch(
+        "https://persona-fgx3.onrender.com/api/chat",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: userMessage,
+            mentorId: selectedMentor.id,
+            sessionId: selectedMentor.id + "-" + guestToken.current,
+          }),
+        }
+      );
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error('Thodi dikkat ho gayi, 1 minute rukna bas');
+        throw new Error("Thodi dikkat ho gayi, 1 minute rukna bas");
       }
 
       setIsLoading(false);
@@ -123,7 +128,10 @@ const Chat = ({ selectedMentor, onBack }) => {
     } catch (error) {
       console.error("Error:", error);
       setIsLoading(false);
-      simulateTyping(error.message || "Sorry, there was an error. Please try again.", 1000);
+      simulateTyping(
+        error.message || "Sorry, there was an error. Please try again.",
+        1000
+      );
     }
   };
 
@@ -146,8 +154,8 @@ const Chat = ({ selectedMentor, onBack }) => {
           >
             <ArrowLeftIcon className="h-6 w-6" />
           </button>
-          <img 
-            src={selectedMentor.image} 
+          <img
+            src={selectedMentor.image}
             alt={selectedMentor.name}
             className="w-10 h-10 rounded-full mr-3 border-2 border-orange-400 object-cover"
           />
@@ -158,29 +166,43 @@ const Chat = ({ selectedMentor, onBack }) => {
 
         {/* Messages */}
         <div className="flex-1 overflow-y-auto py-4 scrollbar-custom">
+          
           <div className="space-y-4 px-2">
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex ${
+                  message.role === "user" ? "justify-end" : "justify-start"
+                }`}
               >
                 <div
                   className={`max-w-[85%] p-3 rounded-xl shadow-lg 
-                    ${message.role === 'user' 
-                      ? 'bg-gradient-to-r from-orange-500 to-red-500' 
-                      : 'bg-gradient-to-r from-gray-800 to-gray-700/90'}
+                    ${
+                      message.role === "user"
+                        ? "bg-gradient-to-r from-orange-500 to-red-500"
+                        : "bg-gradient-to-r from-gray-800 to-gray-700/90"
+                    }
                     hover:-translate-y-0.5 transition-all duration-200`}
                 >
                   <div className="prose prose-invert max-w-none leading-relaxed space-y-2">
-                    {message.role === 'user' ? (
-  <p>{message.content}</p>
-) : (
-  <MarkdownMessage text={message.content} />
-)}
+                    {message.role === "user" ? (
+                      <p>{message.content}</p>
+                    ) : (
+                      <MarkdownMessage text={message.content} />
+                    )}
                   </div>
                 </div>
               </div>
             ))}
+            {isLoading && (
+              <div><div className="flex justify-start animate-fade-in">
+                <div className="max-w-[85%] p-3 rounded-xl shadow-lg bg-gradient-to-r from-gray-800 to-gray-700/90">
+                  <div className="animate-pulse max-w-none text-white">
+                    Thinking....
+                  </div>
+                </div>
+              </div></div>
+            )}
             {isTyping && (
               <div className="flex justify-start animate-fade-in">
                 <div className="max-w-[85%] p-3 rounded-xl shadow-lg bg-gradient-to-r from-gray-800 to-gray-700/90">
@@ -224,7 +246,7 @@ const Chat = ({ selectedMentor, onBack }) => {
                   <span>Sending</span>
                 </div>
               ) : (
-                'Send'
+                "Send"
               )}
             </button>
           </div>
