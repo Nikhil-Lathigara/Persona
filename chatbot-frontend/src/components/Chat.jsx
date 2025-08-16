@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { ArrowLeftIcon } from '@heroicons/react/24/solid';
+import MarkdownMessage from "./MarkdownMessage";
 
 const Chat = ({ selectedMentor, onBack }) => {
   const [messages, setMessages] = useState([]);
@@ -100,7 +101,7 @@ const Chat = ({ selectedMentor, onBack }) => {
 
     setIsLoading(true);
     try {
-      const response = await fetch('https://persona-fgx3.onrender.com/api/chat', {
+      const response = await fetch('http://localhost:5000/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -114,20 +115,20 @@ const Chat = ({ selectedMentor, onBack }) => {
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to get response');
+        throw new Error('Thodi dikkat ho gayi, 1 minute rukna bas');
       }
 
       setIsLoading(false);
       simulateTyping(data.message, data.typingDelay || 2000);
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       setIsLoading(false);
-      simulateTyping('Sorry, there was an error. Please try again.', 1000);
+      simulateTyping(error.message || "Sorry, there was an error. Please try again.", 1000);
     }
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     }
@@ -172,14 +173,10 @@ const Chat = ({ selectedMentor, onBack }) => {
                 >
                   <div className="prose prose-invert max-w-none leading-relaxed space-y-2">
                     {message.role === 'user' ? (
-                      <p>{message.content}</p>
-                    ) : (
-                      <div 
-                        className="[&_a]:text-orange-400 [&_a]:underline hover:[&_a]:text-orange-300
-                                 [&_p]:mb-4 [&_ul]:list-disc [&_ul]:ml-4 [&_li]:ml-4"
-                        dangerouslySetInnerHTML={{ __html: message.content }}
-                      />
-                    )}
+  <p>{message.content}</p>
+) : (
+  <MarkdownMessage text={message.content} />
+)}
                   </div>
                 </div>
               </div>
