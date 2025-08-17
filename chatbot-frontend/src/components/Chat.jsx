@@ -104,7 +104,7 @@ const Chat = ({ selectedMentor, onBack }) => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        "https://persona-fgx3.onrender.com/api/chat",
+        "http://localhost:5000/api/chat",
         {
           method: "POST",
           headers: {
@@ -117,7 +117,7 @@ const Chat = ({ selectedMentor, onBack }) => {
           }),
         }
       );
-
+      
       const data = await response.json();
       if (!response.ok) {
         throw new Error("Thodi dikkat ho gayi, 1 minute rukna bas");
