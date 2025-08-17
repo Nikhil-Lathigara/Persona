@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { OpenAI } from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { hiteshPersona } from "./personas/hitesh.js";
 import { piyushPersona } from "./personas/piyush.js";
 import rateLimitMiddleware from "./middlewares/rateLimit.js";
@@ -13,10 +13,9 @@ app.use(cors());
 app.use(express.json());
 app.use(rateLimitMiddleware);
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-  baseURL: "https://generativelanguage.googleapis.com/v1beta/openai",
-});
+// Initialize Gemini client
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
 // Store chat histories for different sessions
 const chatHistories = new Map();
@@ -33,7 +32,7 @@ const mentors = {
   },
 };
 
-app.post("/api/chat", rateLimitMiddleware, async (req, res) => {
+app.post("/api/chat", async (req, res) => {
   try {
     const { message, mentorId, sessionId } = req.body;
 
@@ -59,28 +58,26 @@ app.post("/api/chat", rateLimitMiddleware, async (req, res) => {
     }
 
     // Add user message
-    chatHistory.push({ role: "user", content: message });
+    chatHistory.push({ role: "user", parts: [{ text: message }] });
 
-    // Get AI response
-    const response = await client.chat.completions.create({
-      model: "gemini-2.0-flash",
-      messages: chatHistory,
+    // Send chat request to Gemini
+    const result = await model.generateContent({
+      contents: chatHistory,
     });
 
-    // Remove formatResponse usage
-let assistantResponse = response.choices[0].message.content;
+    let assistantResponse =
+      result.response.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
 
-// Clean minor spacing (optional)
-assistantResponse = assistantResponse.replace(/\n{3,}/g, "\n\n").trim();
+    // Clean minor spacing
+    assistantResponse = assistantResponse.replace(/\n{3,}/g, "\n\n").trim();
 
-// Add assistant response to history
-chatHistory.push({ role: "assistant", content: assistantResponse });
+    // Add assistant response to history
+    chatHistory.push({ role: "model", parts: [{ text: assistantResponse }] });
 
-res.json({
-  message: assistantResponse,
-  mentor: mentors[mentorId].name,
-});
-
+    res.json({
+      message: assistantResponse,
+      mentor: mentors[mentorId].name,
+    });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ error: "Internal server error" });
